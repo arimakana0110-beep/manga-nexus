@@ -62,7 +62,7 @@ export default function SearchBar() {
       </button>
 
       {/* Desktop Search Bar */}
-      <div className="hidden sm:block">
+      <div className="hidden sm:block relative">
         <input
           type="text"
           placeholder="Search manga..."
@@ -73,7 +73,7 @@ export default function SearchBar() {
         />
         
         {isOpen && (
-          <div className="absolute top-full left-0 right-0 mt-2 bg-neutral-900/95 backdrop-blur-xl border border-white/10 rounded-xl shadow-2xl overflow-hidden z-50 max-h-96 overflow-y-auto">
+          <div className="absolute top-full left-0 right-0 mt-2 bg-neutral-900 border border-neutral-800 rounded-xl shadow-2xl overflow-hidden z-[9999] max-h-96 overflow-y-auto">
             {isLoading ? (
               <div className="p-4 text-center text-neutral-400">
                 <div className="inline-block animate-spin rounded-full h-6 w-6 border-2 border-emerald-500 border-t-transparent"></div>
@@ -91,7 +91,7 @@ export default function SearchBar() {
                     setIsOpen(false);
                     setQuery('');
                   }}
-                  className="flex items-center gap-4 p-4 hover:bg-white/5 transition-colors border-b border-white/5 last:border-0"
+                  className="flex items-center gap-4 p-4 hover:bg-neutral-800 transition-colors border-b border-neutral-800 last:border-0 opacity-100"
                 >
                   <img
                     src={manga.coverImage.large}
@@ -117,7 +117,7 @@ export default function SearchBar() {
 
       {/* Mobile Expanded Search Overlay */}
       {isExpanded && (
-        <div className="fixed inset-0 z-50 bg-neutral-950/95 backdrop-blur-xl sm:hidden">
+        <div className="fixed inset-0 z-[9999] bg-neutral-950 sm:hidden">
           <div className="container mx-auto px-4 pt-4">
             <div className="flex items-center gap-4">
               <button
@@ -141,7 +141,7 @@ export default function SearchBar() {
             </div>
             
             {isOpen && (
-              <div className="mt-4 bg-neutral-900/50 border border-white/10 rounded-xl overflow-hidden max-h-[calc(100vh-120px)] overflow-y-auto">
+              <div className="mt-4 bg-neutral-900 border border-neutral-800 rounded-xl overflow-hidden max-h-[calc(100vh-120px)] overflow-y-auto">
                 {isLoading ? (
                   <div className="p-8 text-center text-neutral-400">
                     <div className="inline-block animate-spin rounded-full h-8 w-8 border-2 border-emerald-500 border-t-transparent"></div>
@@ -160,7 +160,7 @@ export default function SearchBar() {
                         setIsExpanded(false);
                         setQuery('');
                       }}
-                      className="flex items-center gap-4 p-4 hover:bg-white/5 transition-colors border-b border-white/5 last:border-0"
+                      className="flex items-center gap-4 p-4 hover:bg-neutral-800 transition-colors border-b border-neutral-800 last:border-0 opacity-100"
                     >
                       <img
                         src={manga.coverImage.large}

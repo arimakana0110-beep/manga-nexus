@@ -117,7 +117,7 @@ export default async function MangaDetailPage({ params }: { params: Promise<{ id
                 {chapters.map((chapter) => (
                   <Link
                     key={chapter.id}
-                    href={`/chapter/${encodeURIComponent(chapter.id)}?manga=${id}`}
+                    href={`/chapter/${encodeURIComponent(chapter.id)}?providerMangaId=${matchedManga?.id}&anilistId=${id}`}
                     className="group block py-4 px-5 rounded-xl border border-white/5 bg-white/5 hover:bg-white/10 hover:border-emerald-500/30 transition-all duration-300 group-hover:translate-x-0.5"
                   >
                     <div className="flex items-center justify-between">
