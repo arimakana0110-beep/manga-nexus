@@ -53,13 +53,13 @@ export default async function BrowsePage({ searchParams }: BrowsePageProps) {
       </div>
 
       {/* Results Grid */}
-      <main className="container mx-auto px-4 py-8">
+      <main className="container mx-auto px-4 py-6">
         {manga.length === 0 ? (
           <div className="text-center py-16">
             <p className="text-neutral-400">No manga found matching your criteria.</p>
           </div>
         ) : (
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+          <div className="grid grid-cols-3 gap-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 2xl:grid-cols-8 w-full">
             {manga.map((item) => (
               <Link
                 key={item.id}
@@ -73,12 +73,12 @@ export default async function BrowsePage({ searchParams }: BrowsePageProps) {
                     className="w-full h-full object-cover"
                   />
                   {item.averageScore && (
-                    <div className="absolute bottom-2 left-2 px-2 py-1 rounded-lg bg-emerald-500/90 backdrop-blur-sm text-white text-xs font-bold">
+                    <div className="absolute bottom-2 left-2 px-1.5 py-0.5 rounded-lg bg-emerald-500/90 backdrop-blur-sm text-white text-[10px] font-bold">
                       {(item.averageScore / 10).toFixed(1)}
                     </div>
                   )}
                 </div>
-                <h3 className="font-medium text-xs sm:text-sm text-neutral-100 line-clamp-2 group-hover:text-emerald-400 transition-colors">
+                <h3 className="font-semibold text-[11px] sm:text-xs md:text-sm text-neutral-100 line-clamp-2 mt-1.5 group-hover:text-emerald-400 transition-colors">
                   {item.title.english || item.title.romaji}
                 </h3>
               </Link>
