@@ -2,6 +2,8 @@ import { fetchFilteredManga } from '@/lib/anilist';
 import Link from 'next/link';
 import FilterPanel from '@/components/FilterPanel';
 
+export const dynamic = 'force-dynamic';
+
 interface BrowsePageProps {
   searchParams: Promise<{ genres?: string; sort?: string; format?: string; page?: string }>;
 }

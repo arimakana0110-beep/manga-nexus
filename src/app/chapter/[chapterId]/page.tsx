@@ -3,6 +3,8 @@ import { toProxiedImageUrl } from '@/lib/imageProxy';
 import Link from 'next/link';
 import ChapterReaderContent from './ChapterReaderContent';
 
+export const dynamic = 'force-dynamic';
+
 interface ChapterPageProps {
   params: Promise<{ chapterId: string }>;
   searchParams: Promise<{ providerMangaId?: string; anilistId?: string }>;
