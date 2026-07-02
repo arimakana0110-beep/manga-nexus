@@ -102,7 +102,7 @@ export default function ChapterReaderContent({
       </div>
 
       {/* Manga Pages Container */}
-      <div className="w-full max-w-2xl md:max-w-3xl mx-auto px-1 space-y-1 py-4 mt-16 mb-20">
+      <div className="w-full max-w-2xl md:max-w-3xl mx-auto px-1 space-y-1 py-4 mt-16 pb-24">
         {pageUrls.map((url, index) => (
           <MangaPanel key={index} url={url} index={index} />
         ))}
@@ -110,12 +110,11 @@ export default function ChapterReaderContent({
 
       {/* Bottom Navigation Dock */}
       <div 
-        className={`fixed bottom-0 inset-x-0 z-50 bg-neutral-900/80 backdrop-blur-md border-t border-white/5 p-4 transition-all duration-300 ${
+        className={`fixed bottom-0 left-0 right-0 z-40 bg-neutral-950/80 backdrop-blur-md border-t border-neutral-800/60 p-4 shadow-xl transition-all duration-300 ${
           showControls ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0 pointer-events-none'
         }`}
       >
-        <div className="container mx-auto px-4">
-          <div className="flex items-center justify-between max-w-2xl mx-auto">
+        <div className="max-w-xl mx-auto flex items-center justify-between gap-4">
             {/* Previous Chapter Button */}
             {prevChapter ? (
               <button
@@ -164,7 +163,6 @@ export default function ChapterReaderContent({
               </button>
             )}
           </div>
-        </div>
       </div>
     </div>
   );

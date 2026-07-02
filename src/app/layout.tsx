@@ -15,8 +15,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Manga Nexus",
-  description: "Discover and read manga from multiple sources",
+  title: 'MangaLume - Read Manga Online',
+  description: 'Immerse yourself in high-quality manga chapters, updated live on MangaLume.',
 };
 
 export default function RootLayout({
