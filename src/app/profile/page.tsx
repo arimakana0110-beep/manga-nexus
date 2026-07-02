@@ -6,16 +6,29 @@ export default function ProfilePage() {
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [user, setUser] = useState<{ email: string } | null>(null);
+  const [user, setUser] = useState<{ email: string; displayName?: string; id?: number } | null>(null);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
+  const [newName, setNewName] = useState('');
+  const [nameMsg, setNameMsg] = useState('');
 
   useEffect(() => {
     fetch('/api/auth/me')
-      .then(res => res.json())
+      .then(async (res) => {
+        if (!res.ok) {
+          throw new Error(`Server returned status code: ${res.status}`);
+        }
+        return res.json();
+      })
       .then(data => {
-        if (data.authenticated) setUser({ email: data.email });
+        if (data.authenticated) {
+          setUser({ email: data.email, displayName: data.displayName, id: data.id });
+        }
         setLoading(false);
+      })
+      .catch(err => {
+        console.error("Auth hydration parse error caught gracefully:", err);
+        setLoading(false); // Releases the "Syncing with TiDB..." fallback state safely
       });
   }, []);
 
@@ -48,6 +61,20 @@ export default function ProfilePage() {
     setUser(null);
   };
 
+  const updateName = async () => {
+    const res = await fetch('/api/profile/display-name', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ displayName: newName })
+    });
+    const data = await res.json();
+    if (!res.ok) setNameMsg(data.error);
+    else {
+      setNameMsg('Display name updated!');
+      setUser(prev => prev ? { ...prev, displayName: newName } : null);
+    }
+  };
+
   if (loading) return <div className="min-h-screen w-full bg-black flex items-center justify-center text-neutral-500">Syncing with TiDB...</div>;
 
   if (user) {
@@ -59,7 +86,23 @@ export default function ProfilePage() {
           </div>
           <h1 className="text-xl font-bold tracking-tight text-white mb-1">Account Active</h1>
           <p className="text-neutral-400 text-sm mb-6">{user.email}</p>
-          <button onClick={handleLogout} className="w-full flex items-center justify-center gap-2 bg-neutral-800 hover:bg-red-950/40 text-neutral-300 hover:text-red-400 border border-neutral-700 hover:border-red-900/50 py-3 rounded-xl transition-all">
+          
+          <div className="mt-6 pt-6 border-t border-neutral-800 text-left w-full">
+            <label className="text-xs font-semibold text-neutral-400 block mb-2">CHOOSE UNIQUE DISPLAY NAME</label>
+            <div className="flex gap-2">
+              <input 
+                type="text" 
+                value={newName || user.displayName || ''} 
+                onChange={e => setNewName(e.target.value)} 
+                placeholder="Enter unique name..." 
+                className="flex-1 bg-black border border-neutral-800 rounded-xl px-4 py-2 text-sm text-white focus:outline-none focus:border-emerald-500" 
+              />
+              <button onClick={updateName} className="bg-emerald-500 text-black px-4 py-2 font-bold rounded-xl text-sm transition-all hover:bg-emerald-600">Save</button>
+            </div>
+            {nameMsg && <p className="text-[11px] mt-1.5 text-emerald-400">{nameMsg}</p>}
+          </div>
+
+          <button onClick={handleLogout} className="w-full flex items-center justify-center gap-2 bg-neutral-800 hover:bg-red-950/40 text-neutral-300 hover:text-red-400 border border-neutral-700 hover:border-red-900/50 py-3 rounded-xl transition-all mt-6">
             <LogOut className="w-4 h-4"/> Sign Out
           </button>
         </div>

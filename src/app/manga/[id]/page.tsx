@@ -1,6 +1,7 @@
 import { fetchMangaDetails } from '@/lib/anilist';
 import { getChapters, pickBestSearchResult, searchManga } from '@/lib/mangaProvider';
 import Link from 'next/link';
+import CommentSection from '@/components/CommentSection';
 
 export default async function MangaDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -138,6 +139,9 @@ export default async function MangaDetailPage({ params }: { params: Promise<{ id
               </div>
             )}
           </div>
+
+          {/* Discussion Arena - Comment Section */}
+          <CommentSection mangaId={id} />
         </div>
       </div>
     </div>
