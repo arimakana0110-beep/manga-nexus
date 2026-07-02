@@ -14,6 +14,29 @@ interface ChapterReaderContentProps {
   anilistId?: string;
 }
 
+function MangaPanel({ url, index }: { url: string; index: number }) {
+  const [isImgLoaded, setIsImgLoaded] = useState(false);
+
+  return (
+    <div className="relative w-full min-h-[60vh] bg-neutral-900/40 flex items-center justify-center">
+      {!isImgLoaded && (
+        <div className="absolute inset-0 flex flex-col items-center justify-center bg-neutral-950/20 animate-pulse">
+          <div className="w-8 h-8 border-2 border-neutral-700 border-t-emerald-500 rounded-full animate-spin" />
+          <span className="text-[10px] uppercase tracking-widest text-neutral-500 mt-3">Fetching panel...</span>
+        </div>
+      )}
+      <img 
+        src={url} 
+        alt={`Page ${index + 1}`}
+        loading={index < 2 ? 'eager' : 'lazy'}
+        decoding="async"
+        onLoad={() => setIsImgLoaded(true)}
+        className={`w-full h-auto transition-opacity duration-500 ease-in-out object-contain ${isImgLoaded ? 'opacity-100' : 'opacity-0'}`}
+      />
+    </div>
+  );
+}
+
 export default function ChapterReaderContent({ 
   pageUrls, 
   backUrl, 
@@ -24,7 +47,6 @@ export default function ChapterReaderContent({
 }: ChapterReaderContentProps) {
   const [showControls, setShowControls] = useState(true);
   const [isNavigating, setIsNavigating] = useState(false);
-  const [imagesLoaded, setImagesLoaded] = useState(false);
   const router = useRouter();
 
   // Calculate previous and next chapter indices
@@ -46,40 +68,9 @@ export default function ChapterReaderContent({
     router.push(`/chapter/${encodeURIComponent(chapterId)}?providerMangaId=${providerMangaId}&anilistId=${anilistId}`);
   };
 
-  // Track image loading
-  useEffect(() => {
-    if (pageUrls.length > 0) {
-      setImagesLoaded(false);
-      let loadedCount = 0;
-      
-      const imagePromises = pageUrls.map((url) => {
-        return new Promise<void>((resolve) => {
-          const img = new Image();
-          img.onload = () => {
-            loadedCount++;
-            if (loadedCount === pageUrls.length) {
-              setImagesLoaded(true);
-            }
-            resolve();
-          };
-          img.onerror = () => {
-            loadedCount++;
-            if (loadedCount === pageUrls.length) {
-              setImagesLoaded(true);
-            }
-            resolve();
-          };
-          img.src = url;
-        });
-      });
-
-      Promise.all(imagePromises);
-    }
-  }, [pageUrls]);
-
   return (
     <div 
-      className="bg-neutral-950 text-neutral-100 min-h-screen flex flex-col items-center select-none"
+      className="bg-neutral-950 text-neutral-100 min-h-screen flex flex-col items-center select-none animate-fade-in"
       onClick={handleScreenTap}
     >
       {/* Navigation Loading Overlay */}
@@ -111,21 +102,9 @@ export default function ChapterReaderContent({
       </div>
 
       {/* Manga Pages Container */}
-      <div 
-        className={`w-full max-w-2xl md:max-w-3xl mx-auto px-1 space-y-1 py-4 mt-16 mb-20 transition-opacity duration-500 ${
-          imagesLoaded ? 'opacity-100' : 'opacity-0'
-        }`}
-      >
+      <div className="w-full max-w-2xl md:max-w-3xl mx-auto px-1 space-y-1 py-4 mt-16 mb-20">
         {pageUrls.map((url, index) => (
-          <div key={index} className="relative w-full bg-neutral-900/30 min-h-[40vh] flex items-center justify-center">
-            <img
-              src={url}
-              alt={`Page ${index + 1}`}
-              loading={index < 2 ? 'eager' : 'lazy'}
-              decoding="async"
-              className="w-full h-auto block object-contain"
-            />
-          </div>
+          <MangaPanel key={index} url={url} index={index} />
         ))}
       </div>
 
@@ -149,7 +128,7 @@ export default function ChapterReaderContent({
             ) : (
               <button
                 disabled
-                className="flex items-center gap-2 px-4 py-3 rounded-lg bg-neutral-800/30 text-neutral-600 cursor-not-allowed opacity-30 pointer-events-none"
+                className="flex items-center gap-2 px-4 py-3 rounded-lg bg-neutral-800/30 text-neutral-600 cursor-not-allowed opacity-20 pointer-events-none"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"></path><path d="M9 12h12"></path></svg>
                 <span className="hidden sm:inline text-sm">Previous</span>
@@ -178,7 +157,7 @@ export default function ChapterReaderContent({
             ) : (
               <button
                 disabled
-                className="flex items-center gap-2 px-4 py-3 rounded-lg bg-neutral-800/30 text-neutral-600 cursor-not-allowed opacity-30 pointer-events-none"
+                className="flex items-center gap-2 px-4 py-3 rounded-lg bg-neutral-800/30 text-neutral-600 cursor-not-allowed opacity-20 pointer-events-none"
               >
                 <span className="hidden sm:inline text-sm">Next</span>
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6"></path><path d="M15 12H3"></path></svg>

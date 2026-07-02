@@ -14,7 +14,7 @@ export default async function Home() {
   const recentlyUpdated = recentlyUpdatedManga.slice(0, 8);
 
   return (
-    <div className="bg-neutral-950 text-neutral-100 min-h-screen">
+    <div className="bg-neutral-950 text-neutral-100 min-h-screen animate-fade-in">
       {/* Hero Carousel */}
       <HeroCarousel manga={heroCarouselManga} />
 

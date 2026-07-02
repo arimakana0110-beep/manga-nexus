@@ -33,7 +33,7 @@ export default async function MangaDetailPage({ params }: { params: Promise<{ id
   const chapters = matchedManga ? await getChapters(matchedManga.id) : [];
 
   return (
-    <div className="bg-neutral-950 text-neutral-100 min-h-screen relative overflow-hidden">
+    <div className="bg-neutral-950 text-neutral-100 min-h-screen relative overflow-hidden animate-fade-in">
       {/* Dynamic Ambient Backdrop */}
       <div className="absolute top-0 left-0 right-0 h-[600px] overflow-hidden pointer-events-none">
         <img
