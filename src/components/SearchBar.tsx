@@ -105,7 +105,7 @@ export default function SearchBar() {
                     <div className="flex items-center gap-2 mt-1 text-xs text-neutral-400">
                       {manga.format && <span>{manga.format}</span>}
                       {manga.startDate?.year && <span>• {manga.startDate.year}</span>}
-                      {manga.averageScore && <span>• {manga.averageScore}%</span>}
+                      {manga.averageScore && <span>• {(manga.averageScore / 10).toFixed(1)}</span>}
                     </div>
                   </div>
                 </Link>
@@ -174,7 +174,7 @@ export default function SearchBar() {
                         <div className="flex items-center gap-2 mt-2 text-sm text-neutral-400">
                           {manga.format && <span>{manga.format}</span>}
                           {manga.startDate?.year && <span>• {manga.startDate.year}</span>}
-                          {manga.averageScore && <span>• {manga.averageScore}%</span>}
+                          {manga.averageScore && <span>• {(manga.averageScore / 10).toFixed(1)}</span>}
                         </div>
                       </div>
                     </Link>

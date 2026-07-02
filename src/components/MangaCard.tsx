@@ -8,6 +8,8 @@ interface MangaCardProps {
 }
 
 export default function MangaCard({ id, title, coverImage, averageScore }: MangaCardProps) {
+  const formattedScore = averageScore ? (averageScore / 10).toFixed(1) : 'N/A';
+
   return (
     <Link href={`/manga/${id}`}>
       <div className="group relative overflow-hidden rounded-xl border border-neutral-800 bg-neutral-900/50 backdrop-blur-sm transition-all duration-300 hover:border-neutral-600 hover:shadow-xl hover:shadow-neutral-900/50 hover:-translate-y-1">
@@ -21,7 +23,7 @@ export default function MangaCard({ id, title, coverImage, averageScore }: Manga
           />
           {/* Rating Badge */}
           <div className="absolute top-2 right-2 rounded-lg bg-black/70 px-2 py-1 text-xs font-semibold text-white backdrop-blur-sm">
-            {averageScore}/100
+            {formattedScore}
           </div>
         </div>
 

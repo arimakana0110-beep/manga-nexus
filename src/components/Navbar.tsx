@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import SearchBar from './SearchBar';
+import FilterPanel from './FilterPanel';
 
 export default function Navbar() {
   return (
@@ -11,8 +12,11 @@ export default function Navbar() {
             Manga Nexus
           </Link>
 
-          {/* Search Bar */}
-          <SearchBar />
+          {/* Search Bar and Filter */}
+          <div className="flex items-center gap-3">
+            <FilterPanel />
+            <SearchBar />
+          </div>
         </div>
       </div>
     </nav>

@@ -24,7 +24,7 @@ export default async function Home() {
         <section>
           <div className="flex items-center justify-between mb-4 md:mb-6">
             <h2 className="text-xl md:text-2xl font-bold tracking-tight">Trending Right Now</h2>
-            <Link href="#" className="text-emerald-400 hover:text-emerald-300 text-xs md:text-sm font-medium transition-colors">
+            <Link href="/browse?sort=TRENDING" className="text-emerald-400 hover:text-emerald-300 text-xs md:text-sm font-medium transition-colors">
               View All
             </Link>
           </div>
@@ -46,7 +46,7 @@ export default async function Home() {
                   </div>
                   {manga.averageScore && (
                     <div className="absolute bottom-2 left-2 px-1.5 py-0.5 md:px-2 md:py-1 rounded-lg bg-emerald-500/90 backdrop-blur-sm text-white text-[10px] md:text-xs font-bold">
-                      {manga.averageScore}
+                      {(manga.averageScore / 10).toFixed(1)}
                     </div>
                   )}
                 </div>
@@ -62,7 +62,7 @@ export default async function Home() {
         <section>
           <div className="flex items-center justify-between mb-4 md:mb-6">
             <h2 className="text-xl md:text-2xl font-bold tracking-tight">Most Viewed This Week</h2>
-            <Link href="#" className="text-emerald-400 hover:text-emerald-300 text-xs md:text-sm font-medium transition-colors">
+            <Link href="/browse?sort=POPULARITY" className="text-emerald-400 hover:text-emerald-300 text-xs md:text-sm font-medium transition-colors">
               View All
             </Link>
           </div>
@@ -95,7 +95,7 @@ export default async function Home() {
         <section>
           <div className="flex items-center justify-between mb-4 md:mb-6">
             <h2 className="text-xl md:text-2xl font-bold tracking-tight">Recently Updated</h2>
-            <Link href="#" className="text-emerald-400 hover:text-emerald-300 text-xs md:text-sm font-medium transition-colors">
+            <Link href="/browse?sort=UPDATED" className="text-emerald-400 hover:text-emerald-300 text-xs md:text-sm font-medium transition-colors">
               View All
             </Link>
           </div>

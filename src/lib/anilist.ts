@@ -285,3 +285,105 @@ export async function searchManga(query: string): Promise<AniListManga[]> {
   const data: AniListResponse = await response.json();
   return data.data.Page.media;
 }
+
+export async function fetchFilteredManga(
+  genres?: string | string[],
+  sort?: string,
+  format?: string,
+  page: number = 1,
+  perPage: number = 24
+): Promise<AniListManga[]> {
+  // 1. Define lists of known AniList Tags versus official Genres
+  const ANILIST_TAGS = ["Harem", "Isekai"];
+
+  // 2. Process genres safely and separate from tags
+  const processedGenres = typeof genres === 'string'
+    ? genres.split(',').map(g => g.trim()).filter(Boolean)
+    : Array.isArray(genres) ? genres.filter(Boolean) : [];
+
+  // 3. Separate them out dynamically
+  const cleanGenres = processedGenres.filter(g => !ANILIST_TAGS.includes(g));
+  const cleanTags = processedGenres.filter(g => ANILIST_TAGS.includes(g));
+
+  // 4. Map format to country code
+  let countryFilter: string | undefined = undefined;
+  if (format) {
+    const normalized = format.toLowerCase();
+    if (normalized === 'manga') countryFilter = 'JP';  // Japan
+    if (normalized === 'manhwa') countryFilter = 'KR'; // South Korea (Manhwa)
+    if (normalized === 'manhua') countryFilter = 'CN'; // China (Manhua)
+  }
+
+  // 5. Map sort parameters to valid AniList MediaSort enums
+  let aniListSort = "TRENDING_DESC";
+  if (sort === "TRENDING") aniListSort = "TRENDING_DESC";
+  if (sort === "POPULARITY") aniListSort = "POPULARITY_DESC";
+  if (sort === "UPDATED") aniListSort = "UPDATED_AT_DESC";
+  if (sort === "SCORE") aniListSort = "SCORE_DESC";
+
+  // 6. Construct GraphQL variables cleanly
+  const variables: Record<string, any> = {
+    page: page || 1,
+    perPage: perPage || 24,
+    sort: [aniListSort]
+  };
+
+  // Only add the parameters if elements are actively selected
+  if (cleanGenres.length > 0) variables.genre_in = cleanGenres;
+  if (cleanTags.length > 0) variables.tag_in = cleanTags;
+  if (countryFilter) variables.countryOfOrigin = countryFilter;
+
+  const query = `
+    query ($page: Int, $perPage: Int, $genre_in: [String], $tag_in: [String], $sort: [MediaSort], $countryOfOrigin: CountryCode) {
+      Page(page: $page, perPage: $perPage) {
+        media(type: MANGA, genre_in: $genre_in, tag_in: $tag_in, sort: $sort, countryOfOrigin: $countryOfOrigin) {
+          id
+          title {
+            romaji
+            english
+          }
+          coverImage {
+            large
+            extraLarge
+          }
+          averageScore
+          format
+          startDate {
+            year
+          }
+          description
+          bannerImage
+          genres
+        }
+      }
+    }
+  `;
+
+  const response = await fetch('https://graphql.anilist.co', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+    },
+    body: JSON.stringify({
+      query,
+      variables,
+    }),
+  });
+
+  if (!response.ok) {
+    let errorMessage = response.statusText;
+    try {
+      const errorJson = await response.json();
+      if (errorJson.errors && errorJson.errors[0]) {
+        errorMessage = errorJson.errors[0].message;
+      }
+    } catch (e) {
+      // Fallback if response isn't JSON
+    }
+    throw new Error(`AniList API error: ${errorMessage}`);
+  }
+
+  const data: AniListResponse = await response.json();
+  return data.data.Page.media;
+}

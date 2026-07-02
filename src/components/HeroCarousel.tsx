@@ -26,6 +26,7 @@ export default function HeroCarousel({ manga }: HeroCarouselProps) {
 
   const currentManga = manga[currentSlide];
   const backgroundImage = currentManga.bannerImage || currentManga.coverImage.extraLarge || currentManga.coverImage.large;
+  const formattedScore = currentManga.averageScore ? (currentManga.averageScore / 10).toFixed(1) : null;
 
   return (
     <div className="relative h-[45vh] md:h-[500px] lg:h-[600px] overflow-hidden">
@@ -49,9 +50,9 @@ export default function HeroCarousel({ manga }: HeroCarouselProps) {
             <span className="px-2 py-0.5 md:px-3 md:py-1 rounded-full bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 text-[10px] md:text-xs font-semibold uppercase tracking-wider">
               Featured
             </span>
-            {currentManga.averageScore && (
+            {formattedScore && (
               <span className="px-2 py-0.5 md:px-3 md:py-1 rounded-full bg-white/10 border border-white/20 text-white text-[10px] md:text-xs font-semibold">
-                {currentManga.averageScore}/100
+                {formattedScore}
               </span>
             )}
           </div>
@@ -93,17 +94,6 @@ export default function HeroCarousel({ manga }: HeroCarouselProps) {
             aria-label={`Go to slide ${index + 1}`}
           />
         ))}
-      </div>
-
-      {/* Slide Numbers */}
-      <div className="absolute bottom-6 md:bottom-8 right-4 md:right-8 flex items-center gap-2 z-20 mr-24 md:mr-32">
-        <span className="text-white/60 text-xs md:text-sm font-medium">
-          {String(currentSlide + 1).padStart(2, '0')}
-        </span>
-        <span className="text-white/30">/</span>
-        <span className="text-white/60 text-xs md:text-sm font-medium">
-          {String(manga.length).padStart(2, '0')}
-        </span>
       </div>
     </div>
   );
