@@ -110,7 +110,7 @@ export default function ChapterReaderContent({
 
       {/* Bottom Navigation Dock */}
       <div 
-        className={`fixed bottom-0 left-0 right-0 z-40 bg-neutral-950/80 backdrop-blur-md border-t border-neutral-800/60 p-4 shadow-xl transition-all duration-300 ${
+        className={`fixed bottom-0 left-0 right-0 z-[60] bg-neutral-950/80 backdrop-blur-md border-t border-neutral-800/60 p-4 shadow-xl transition-all duration-300 ${
           showControls ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0 pointer-events-none'
         }`}
       >
